@@ -59,20 +59,29 @@ export const getUserById = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updatedData = req.body;
+    const { oldPassword, newPassword, ...rest } = req.body;
+    const user = await User.findById(req.params.id);
 
-    if (updatedData.password) {
-      updatedData.password = await bcrypt.hash(updatedData.password, 10);
-    }
-
-    const user = await User.findByIdAndUpdate(id, updatedData, { new: true });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json(user);
+
+    // Vérifie si l'ancien mot de passe correspond
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Old password is incorrect' });
+    }
+
+    // Si un nouveau mot de passe est fourni, hash et mets à jour
+    if (newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      rest.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await User.findByIdAndUpdate(req.params.id, rest, { new: true });
+    res.json({ message: 'Profile updated successfully' });
   } catch (error) {
-    res.status(500).json({ message: "An error occurred" });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 

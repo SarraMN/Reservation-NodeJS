@@ -1,0 +1,35 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore log files
+*.log
+
+# Ignore all git files
+.git
+.gitignore
+
+# Ignore Dockerfile if you don't want to copy it into the image (optional)
+Dockerfile
+
+# Ignore environment files if not needed in the image
+.env
+
+# Ignore the coverage directory (for test coverage reports)
+coverage
+
+# Ignore the build directory if you have one (e.g., from a frontend build process)
+build
+dist
+
+# Ignore the directory where you keep secrets or other sensitive data
+secrets
+
+# Ignore temporary or IDE/editor files
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Ignore the npm debug log
+npm-debug.log
+yarn-error.log

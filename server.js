@@ -13,7 +13,9 @@ process.env.TZ = 'Europe/Paris'; // Set to 'Europe/Paris' for Central European S
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise;
 
-const URL = "mongodb://localhost:27017/Meeting";
+const URL = process.env.URL || 'mongodb://localhost:27017/Meeting'; // Fallback to localhost if URL isn't set
+
+//"mongodb://localhost:27017/Meeting";
 
 
 mongoose
@@ -39,10 +41,12 @@ app.use('/salle', authMiddleware,salleReunionRouter);
 
 
 
-const PORT = 9090;
-const hostname = "127.0.0.1";
+const PORT = process.env.PORT || 9090;
+const hostname = process.env.hostname || 'localhost';
 
-
+//localhost:hostname
+//port:9090
 app.listen(PORT, hostname, ()=>{
     console.log(`server running on http://${hostname}:${PORT}`);
 })
+
